@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id, 10);
+    const id = parseInt(context.params.id, 10);
     const body = await request.json();
     const { imageUrl, answers, categoryId } = body;
 
@@ -34,7 +34,7 @@ export async function PUT(
 
     return NextResponse.json(updatedQuestion);
   } catch (error) {
-    console.error(`Erro ao atualizar pergunta ${params.id}:`, error);
+    console.error(`Erro ao atualizar pergunta ${context.params.id}:`, error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }
@@ -44,10 +44,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id, 10);
+    const id = parseInt(context.params.id, 10);
 
     const deletedQuestion = await prisma.question.delete({
       where: { id },
@@ -55,7 +55,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedQuestion);
   } catch (error) {
-    console.error(`Erro ao deletar pergunta ${params.id}:`, error);
+    console.error(`Erro ao deletar pergunta ${context.params.id}:`, error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }
